@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Custom Quiz</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+        <style>
+            html, body {
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            body {
+                display: flex;
+                flex-direction: column;
+                min-height: 100vh;
+                background-color: black;
+            }
+            .container {
+                display: flex;
+                flex-direction: column;
+                height: 100%;
+                padding: 20px;
+                box-sizing: border-box;
+            }
+            .question-section {
+                height: 20%;
+                display: flex;
+                align-items: center;
+            }
+            .options-section {
+                height: 80%;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-evenly;
+                align-items: center;
+            }
+            h1 {
+                margin: 0;
+                width: 100%;
+                font-family: "Jost";
+                color: white;
+            }
+            button {
+                height: 20%;
+                width: 50%;
+                margin: 10px;
+                font-size: 16px;
+                background-color: #32a852;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="question-section">
+                <h1 align="center">Question: [input]</h1>
+            </div>
+            <div class="options-section">
+                <button id="a" class="option">A. </button>
+                <button id="b" class="option">B. </button>
+                <button id="c" class="option">C. </button>
+                <button id="d" class="option">D. </button>
+            </div>
+        </div>
+        <script>
+            const leQuestion = document.querySelector("h1");
+            const op1 = document.getElementById("a");
+            const op2 = document.getElementById("b");
+            const op3 = document.getElementById("c");
+            const op4 = document.getElementById("d");
+            const lig = document.getElementsByClassName("option");
+            const options = Array.from(lig);
+            let iggy = [];
+            let lastAnswered = true;
+
+            let questions = [];6
+            let answers = [];
+            let questionNum = Number(prompt("Enter number of questions(must be 5+):"));
+            for(let i = 0; i<questionNum; i++){
+                questions.push(prompt("Enter question " + (i+1) + ":"));
+                answers.push(prompt("Enter answer " + (i+1) + ":"));
+            }
+            console.log(questions, answers);
+            let currentQuestion = 0;
+
+            function displayQuestion(questionIndex) {
+                leQuestion.textContent = "Question: " + questions[questionIndex];
+                let usedAnswers = new Set();
+                let correctOne = Math.floor(Math.random() * 4);
+                
+                // First, add the correct answer
+                usedAnswers.add(answers[questionIndex]);
+                
+                options.forEach((option, index) => {
+                    if (index === correctOne) {
+                        // Place the correct answer
+                        option.textContent = answers[questionIndex];
+                    } else {
+                        // Keep trying until we find an unused answer
+                        let chosenOne;
+                        do {
+                            let randomIndex = Math.floor(Math.random() * answers.length);
+                            chosenOne = answers[randomIndex];
+                        } while (usedAnswers.has(chosenOne));
+                        
+                        usedAnswers.add(chosenOne);
+                        option.textContent = chosenOne;
+                    }
+                });
+            }
+
+            function getScore () {
+                let score = 0;
+                answers.forEach((answer, index) => {
+                    if (answer === iggy[index]) {
+                        score++;
+                    }
+                    console.log(score);
+                });
+                return score;
+            }
+
+            // Add click event listeners to all options
+            options.forEach((option, index) => {
+                option.addEventListener('click', () => {
+                    if (currentQuestion < questions.length - 1) {
+                        currentQuestion++;
+                        iggy.push(option.textContent);
+                        console.log(option.textContent);
+                        displayQuestion(currentQuestion);
+                    } else if (lastAnswered) {
+                        // Quiz is over
+                        console.log(iggy)
+                        iggy.push(option.textContent);
+                        console.log(iggy);
+                        alert("Quiz over! Your score: " + getScore() + "/" + questions.length);
+                        lastAnswered = false;
+                    } else {
+                        alert("Quiz over! Your score: " + getScore() + "/" + questions.length);
+                    }
+                });
+            });
+
+            // Display the first question
+            displayQuestion(currentQuestion);
+        </script>
+    </body>
+</html>
