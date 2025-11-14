@@ -65,6 +65,29 @@
             </div>
         </div>
         <script>
+
+
+            //cookiee😋
+            function setCookie(cname, cvalue, exdays) {
+                const d = new Date();
+                d.setTime(d.getTime() + (exdays*24*60*60*1000));
+                let expires = "expires="+ d.toUTCString();
+                document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+            }
+            function getCookie(name) {
+                const decoded = decodeURIComponent(document.cookie);
+                const match = decoded
+                    .split("; ")
+                    .find(x => x.startsWith(name + "="));
+
+                return match ? match.substring(name.length + 1) : null;
+            }
+
+            function convertToArray(cookieValue) {
+                return JSON.parse(decodeURIComponent(cookieValue));
+            }
+
+
             const leQuestion = document.querySelector("h1");
             const op1 = document.getElementById("a");
             const op2 = document.getElementById("b");
@@ -75,12 +98,18 @@
             let iggy = [];
             let lastAnswered = true;
 
-            let questions = [];6
+            let questions = [];
             let answers = [];
-            let questionNum = Number(prompt("Enter number of questions(must be 5+):"));
-            for(let i = 0; i<questionNum; i++){
-                questions.push(prompt("Enter question " + (i+1) + ":"));
-                answers.push(prompt("Enter answer " + (i+1) + ":"));
+            
+            if(prompt("Load saved quiz? (yes/no)").toLowerCase() === "no"){
+                var questionNum = Number(prompt("Enter number of questions(must be 5+):"));
+                for(let i = 0; i<questionNum; i++){
+                    questions.push(prompt("Enter question " + (i+1) + ":"));
+                    answers.push(prompt("Enter answer " + (i+1) + ":"));
+                }
+            } else {
+                questions = convertToArray(getCookie("questions"));
+                answers = convertToArray(getCookie("answers"));
             }
             console.log(questions, answers);
             let currentQuestion = 0;
@@ -145,7 +174,13 @@
 
             // Display the first question
             displayQuestion(currentQuestion);
+            document.addEventListener("keydown", (event) => {
+                if (event.key === "Enter") {
+                    document.cookie = `questions=${encodeURIComponent(JSON.stringify(questions))}; path=/;`;
+                    document.cookie = `answers=${encodeURIComponent(JSON.stringify(answers))}; path=/;`;
+                    alert("Quiz saved. Only one quiz can be saved at a time.");
+                }
+            });
         </script>
     </body>
-
 </html>
