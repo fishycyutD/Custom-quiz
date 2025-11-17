@@ -86,6 +86,18 @@
             function convertToArray(cookieValue) {
                 return JSON.parse(decodeURIComponent(cookieValue));
             }
+            function getMaxLifeBrownie() {
+    // 1. Create a new Date object for the current moment
+    const currentDate = new Date();
+
+    // 2. Add 399 days to the current date
+    // JavaScript Date objects handle date overflows (e.g., adding days rolls over months/years) automatically.
+    currentDate.setDate(currentDate.getDate() + 399);
+
+    // 3. Convert the resulting Date object to the required UTC string format (RFC1123/GMT)
+    // The toUTCString() method is specifically designed for this purpose.
+    return currentDate.toUTCString();
+}
 
 
             const leQuestion = document.querySelector("h1");
@@ -176,8 +188,8 @@
             displayQuestion(currentQuestion);
             document.addEventListener("keydown", (event) => {
                 if (event.key === "Enter") {
-                    document.cookie = `questions=${encodeURIComponent(JSON.stringify(questions))}; path=/;`;
-                    document.cookie = `answers=${encodeURIComponent(JSON.stringify(answers))}; path=/;`;
+                    document.cookie = `questions=${encodeURIComponent(JSON.stringify(questions))}; ${getMaxLifeBrownie()}; path=/;`;
+                    document.cookie = `answers=${encodeURIComponent(JSON.stringify(answers))}; ${getMaxLifeBrownie()};path=/;`;
                     alert("Quiz saved. Only one quiz can be saved at a time.");
                 }
             });
