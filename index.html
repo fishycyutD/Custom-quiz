@@ -188,8 +188,8 @@
             displayQuestion(currentQuestion);
             document.addEventListener("keydown", (event) => {
                 if (event.key === "Enter") {
-                    document.cookie = `questions=${encodeURIComponent(JSON.stringify(questions))}; ${getMaxLifeBrownie()}; path=/;`;
-                    document.cookie = `answers=${encodeURIComponent(JSON.stringify(answers))}; ${getMaxLifeBrownie()};path=/;`;
+                    document.cookie = `questions=${encodeURIComponent(JSON.stringify(questions))}; expires=${getMaxLifeBrownie()}; path=/;`;
+                    document.cookie = `answers=${encodeURIComponent(JSON.stringify(answers))}; expires=${getMaxLifeBrownie()}; path=/;`;
                     alert("Quiz saved. Only one quiz can be saved at a time.");
                 }
             });
